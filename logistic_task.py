@@ -7,9 +7,11 @@ from sklearn.metrics import  confusion_matrix
 from pandas_profiling import ProfileReport
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 def cleaning_and_prediction():
-    df  = pd.read_csv("Output.csv")
+    location = os.path.abspath(os.path.dirname(__file__)) + "//Output.csv"
+    df  = pd.read_csv(location)
     df.drop(columns=(['Unnamed: 0']),inplace = True)
     remove_index= []
     for i in range(0,42717):
@@ -18,7 +20,13 @@ def cleaning_and_prediction():
         except:
             remove_index.append(i)
 
-    df.drop(index = remove_index,inplace = True)
+    # df.drop(index = remove_index,inplace = True)
+    for i in remove_index:
+        try:
+           df.drop( df.index[i],inplace = True)
+        except:
+            pass
+    # df.index[i]
     df.reset_index(drop=True, inplace=True)
     ProfileReport(df)
     df.drop_duplicates(inplace = True)
@@ -56,9 +64,11 @@ def cleaning_and_prediction():
 
 
     scaler = StandardScaler()
-    profile = ProfileReport(pd.DataFrame(scaler.fit_transform(X)),title ="Pandas Profiling Report")
-
-
+    profile = ProfileReport(pd.DataFrame(scaler.fit_transform(X)))
+    # basedir = "index2.html"
+    # profile.to_html(basedir)
+    basedir = os.path.abspath(os.path.dirname(__file__)) + "\\templates\\index2.html"
+    profile.to_file (basedir)
 
 
     df_new_scalar = pd.DataFrame(scaler.fit_transform(X))

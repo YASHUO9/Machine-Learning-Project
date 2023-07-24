@@ -13,7 +13,7 @@ def files_reading():
         pass
 
 
-    new_dir = os.getcwd() + "\\files"
+    new_dir = os.path.abspath(os.path.dirname(__file__))  + "\\files"
     into_file = os.chdir(new_dir)
     total_files = os.listdir(into_file)
 
@@ -41,7 +41,7 @@ def files_reading():
                 pass
 
         number += 1
-        if number > 6:
+        if number > 5:
             count = False
 
 
